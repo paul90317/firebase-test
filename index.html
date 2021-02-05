@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"></meta>
+        <title>login</title>
+        <link rel="stylesheet" href="/styles.css">
+    </head>
+    <body style="margin:0px;">
+        <div class="head">
+            Chat Room
+        </div>
+        <div class="form" style="width:270px">
+            chat room: <input type="text" id="room"/><br/>
+            nick name: <input type="text" id="name"/><br/>
+            <input type="button" value="login" onclick="login()"/>
+        </div>
+        <script>
+            function login(){
+                var room=document.getElementById("room").value;
+                var name=document.getElementById("name").value;
+                if(room.length<6)return alert("the length of room name can't be lower than 6");
+                if(room.length>16)return alert("the length of room name can't excess 15");
+                document.cookie="room="+room+";";
+                document.cookie="name="+name+";";
+                document.location="/chat.html";                
+            }
+        </script>
+    </body>
+</html>

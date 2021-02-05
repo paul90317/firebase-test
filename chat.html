@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"></meta>
+        <title>chat</title>
+        <link rel="stylesheet" href="/styles.css">
+    </head>
+    <body style="margin:0px;">
+        <div class="head" id="room"></div>
+        <div class="content" id="content"></div>
+        <div class="form">
+            <div id="name" style="display: inline-block;"></div>: 
+            <input type="text" id="msg"/>
+            <input type="button" value="send" onclick="send()"/>
+        </div>
+        <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/forge/0.8.2/forge.all.min.js"></script>
+        <script src="/cipher.js"></script>
+        <script>
+            var config = {
+                databaseURL: "https://chat-d6159-default-rtdb.firebaseio.com/",
+            };
+            firebase.initializeApp(config);
+            var database = firebase.database();
+            
+            var room=getcookie('room')
+            var name=getcookie('name')
+            document.cookie="room=;"
+            document.cookie="name=;"
+            var key=getBytes(sha256(room))
+            var roomid=sha256(sha256(room))
+            database.ref(roomid+'/').on('value',e => {
+                history=e.val()
+                content.innerHTML=""
+                for(var i in history){
+                    content.innerHTML+=decode(history[i],key)+"<br/>"
+                }
+            });
+            document.getElementById('room')=room
+            document.getElementById('name')=name
+            var content=document.getElementById('content')
+            var msg=document.getElementById('msg')
+            function send(){
+                var line=encode(name+": "+msg.value,key)
+                var sha=sha256(line+Math.random().toString())
+                data={
+                    sha:line
+                }
+                database.ref(roomid+'/').push(data)
+            }
+
+        </script>
+    </body>
+</html>
