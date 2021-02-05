@@ -31,23 +31,21 @@
             var key=getBytes(sha256(room))
             var roomid=sha256(sha256(room))
             database.ref('/'+roomid+'/').on('value',e => {
-                history=e.val()
+                var hist=e.val()
+                console.log(hist)
                 content.innerHTML=""
-                for(var i in history){
-                    content.innerHTML+=decode(history[i],key)+"<br/>"
+                for(var i in hist){
+                    console.log(i)
+                    content.innerHTML+=decode(hist[i],key)+"<br/>"
                 }
             });
-            document.getElementById('room')=room
-            document.getElementById('name')=name
+            document.getElementById('room').innerHTML=room
+            document.getElementById('name').innerHTML=name
             var content=document.getElementById('content')
             var msg=document.getElementById('msg')
             function send(){
                 var line=encode(name+": "+msg.value,key)
-                var sha=sha256(line+Math.random().toString())
-                data={
-                    sha:line
-                }
-                database.ref('/'+roomid+'/').push(data)
+                database.ref('/'+roomid+'/').push(line)
             }
 
         </script>
