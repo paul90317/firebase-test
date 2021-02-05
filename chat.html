@@ -30,7 +30,7 @@
             document.cookie="name=;"
             var key=getBytes(sha256(room))
             var roomid=sha256(sha256(room))
-            database.ref(roomid+'/').on('value',e => {
+            database.ref('/'+roomid+'/').on('value',e => {
                 history=e.val()
                 content.innerHTML=""
                 for(var i in history){
@@ -47,7 +47,7 @@
                 data={
                     sha:line
                 }
-                database.ref(roomid+'/').push(data)
+                database.ref('/'+roomid+'/').push(data)
             }
 
         </script>
